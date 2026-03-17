@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <style>
+        body { font-family: sans-serif; background: #f0f2f5; padding: 20px; }
+        .dashboard { max-width: 900px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        
+        /* Module 1 & 4: Analytics/Metrics */
+        .metrics-bar { display: flex; gap: 15px; margin-bottom: 20px; }
+        .metric-card { flex: 1; padding: 15px; background: #e7f0ff; border-radius: 5px; text-align: center; font-weight: bold; }
+
+        /* Module 3: Filter & Search */
+        .controls { display: flex; gap: 10px; margin-bottom: 15px; }
+        #searchBox { flex-grow: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+
+        /* Module 2: Record Management Table */
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #f8f9fa; }
+        
+        .btn { padding: 8px 12px; cursor: pointer; border: none; border-radius: 4px; }
+        .btn-add { background: #28a745; color: white; }
+        .btn-edit { background: #ffc107; color: black; margin-right: 5px; }
+        .btn-del { background: #dc3545; color: white; }
+    </style>
+</head>
+<body>
+
+<div class="dashboard">
+    <h2>Admin Dashboard</h2>
+
+    <div class="metrics-bar">
+        <div class="metric-card">Total Records: <span id="totalCount">0</span></div>
+        <div class="metric-card">System: <span style="color: green;">Online</span></div>
+    </div>
+
+    <div class="controls">
+        <input type="text" id="searchBox" placeholder="Search by name..." onkeyup="renderTable()">
+        <button class="btn btn-add" onclick="addRecord()">+ Add New</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+</div>
+
+<script>
+    // Module 5: Data Persistence
+    let records = JSON.parse(localStorage.getItem('adminData')) || [];
+
+    // Module 2: Record Management (Create)
+    function addRecord() {
+        const name = prompt("Enter Name:");
+        const role = prompt("Enter Role:");
+        if (name && role) {
+            records.push({ id: Date.now(), name, role });
+            syncData();
+        }
+    }
+
+    // Module 2: Record Management (Update)
+    function editRecord(id) {
+        const record = records.find(r => r.id === id);
+        const newName = prompt("Update Name:", record.name);
+        const newRole = prompt("Update Role:", record.role);
+        if (newName && newRole) {
+            record.name = newName;
+            record.role = newRole;
+            syncData();
+        }
+    }
+
+    // Module 2: Record Management (Delete)
+    function deleteRecord(id) {
+        if (confirm("Are you sure?")) {
+            records = records.filter(r => r.id !== id);
+            syncData();
+        }
+    }
+
+    // Module 3 & 1: Search & Dynamic Display
+    function renderTable() {
+        const tbody = document.getElementById('tableBody');
+        const search = document.getElementById('searchBox').value.toLowerCase();
+        tbody.innerHTML = "";
+
+        const filtered = records.filter(r => r.name.toLowerCase().includes(search));
+
+        filtered.forEach(r => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${r.name}</td>
+                    <td>${r.role}</td>
+                    <td>
+                        <button class="btn btn-edit" onclick="editRecord(${r.id})">Edit</button>
+                        <button class="btn btn-del" onclick="deleteRecord(${r.id})">Delete</button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        // Module 4: Summary/Analytics update
+        document.getElementById('totalCount').innerText = filtered.length;
+    }
+
+    // Module 5: LocalStorage Save
+    function syncData() {
+        localStorage.setItem('adminData', JSON.stringify(records));
+        renderTable();
+    }
+
+    // Initial Load
+    renderTable();
+</script>
+
+</body>
+</html>
