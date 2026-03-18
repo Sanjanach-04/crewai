@@ -91,12 +91,6 @@ streamlit run app.py
 
 ---
 
-## 📸 Demo
-
-*(Add screenshot here after running the app)*
-
----
-
 ## 🎯 Use Cases
 
 * AI-powered content generation
@@ -136,9 +130,17 @@ streamlit run app.py
 # 📸 Demo
     ## 📸 Demo Output
 
-<p align="center">
-  <img src="demo.png" width="600"/>
-</p>
+        <p align="center">
+        <img src="demo1.png" width="600"/>
+        </p>
+
+        <p align="center">
+        <img src="demo2.png" width="600"/>
+        </p>
+
+        <p align="center">
+        <img src="demo3.png" width="600"/>
+        </p>
 ---
 
 ## 📌 Note
