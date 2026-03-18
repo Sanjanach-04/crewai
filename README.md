@@ -132,6 +132,15 @@ streamlit run app.py
 
 ---
 
+---
+# 📸 Demo
+    ## 📸 Demo Output
+
+<p align="center">
+  <img src="demo.png" width="600"/>
+</p>
+---
+
 ## 📌 Note
 
 Do not expose your API keys publicly. Use environment variables for security.
